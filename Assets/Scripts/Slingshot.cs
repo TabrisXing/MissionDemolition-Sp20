@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour
 {
+    static private Slingshot S;
     [Header("Set in Inspector")]
 
     public GameObject prefabProjectile;
@@ -20,8 +21,17 @@ public class Slingshot : MonoBehaviour
 
     private Rigidbody projectileRigidbody;
 
+    static public Vector3 LAUNCH_POS
+    { // b
+        get
+        {
+            if (S == null) return Vector3.zero;
+            return S.launchPos;
+        }
+    }
     void Awake()
     {
+        S = this;
         Transform launchPointTrans = transform.Find("LaunchPoint"); 
         launchPoint = launchPointTrans.gameObject;
         launchPoint.SetActive(false);
@@ -49,7 +59,8 @@ public class Slingshot : MonoBehaviour
         // Set it to isKinematic for now
         projectileRigidbody = projectile.GetComponent<Rigidbody>();
         projectileRigidbody.isKinematic = true;
-    }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -63,7 +74,9 @@ public class Slingshot : MonoBehaviour
         if (!aimingMode) return;
         Vector3 mousePos2D = Input.mousePosition;
         mousePos2D.z = -Camera.main.transform.position.z;
-        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(mousePos2D);        Vector3 mouseDelta = mousePos3D - launchPos;        float maxMagnitude = this.GetComponent<SphereCollider>().radius;
+        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(mousePos2D);
+        Vector3 mouseDelta = mousePos3D - launchPos;
+        float maxMagnitude = this.GetComponent<SphereCollider>().radius;
 
         if (mouseDelta.magnitude > maxMagnitude)
         {
@@ -82,7 +95,8 @@ public class Slingshot : MonoBehaviour
 
             FollowCam.POI = projectile;
             projectile = null;
-        }
+        }
+
     }
 
 

@@ -117,9 +117,10 @@ public class MissionDemolition : MonoBehaviour
                 uitButton.text = "Show Slingshot";
                 break;
         }
+
     }
 
-        public static void ShotFired()
+    public static void ShotFired()
         { // d
             S.shotsTaken++;
         }
